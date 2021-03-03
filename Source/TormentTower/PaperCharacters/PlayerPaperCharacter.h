@@ -32,20 +32,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// Controls variables
-	UPROPERTY(EditAnywhere, Category = "Controls")
-		float GravityScale;
-	UPROPERTY(EditAnywhere, Category = "Controls")
-		float AirControl;
-	UPROPERTY(EditAnywhere, Category = "Controls")
-		float JumpZVelocity;
-	UPROPERTY(EditAnywhere, Category = "Controls")
-		float GroundFriction;
-	UPROPERTY(EditAnywhere, Category = "Controls")
-		float MaxWalkSpeed;
-	UPROPERTY(EditAnywhere, Category = "Controls")
-		float MaxFlySpeed;
-
 
 public:
 	// Sets default values for this character's properties

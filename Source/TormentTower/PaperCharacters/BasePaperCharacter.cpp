@@ -3,7 +3,7 @@
 
 #include "BasePaperCharacter.h"
 #include "PaperFlipbookComponent.h"
-// #include "Components/TimelineComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 // Sets default values
@@ -12,8 +12,25 @@ ABasePaperCharacter::ABasePaperCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+
 	// Default stats value
 	bIsDead = false;
+
+
+	// Configure character movement
+	GravityScale = 2.0f;
+	AirControl = 1.0f;
+	JumpZVelocity = 1000.f;
+	GroundFriction = 0.80f;
+	MaxWalkSpeed = 600.0f;
+	MaxFlySpeed = 1000.0f;
+
+	GetCharacterMovement()->GravityScale = GravityScale;
+	GetCharacterMovement()->AirControl = AirControl;
+	GetCharacterMovement()->JumpZVelocity = JumpZVelocity;
+	GetCharacterMovement()->GroundFriction = GroundFriction;
+	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
+	GetCharacterMovement()->MaxFlySpeed = MaxFlySpeed;
 }
 
 // Called when the game starts or when spawned
@@ -84,7 +101,7 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 
 	CurrentHP = FMath::Clamp(CurrentHP - Damage, 0.f, MaxHP);
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%f"), CurrentHP));
+	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%f"), CurrentHP));
 
 	OnHit_BP();
 
@@ -101,11 +118,24 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 
 		GetWorld()->GetTimerManager().SetTimer(LoopTimerHandle, this, &ABasePaperCharacter::OnAnimationEnd, FlipbookLengthInSeconds, false);
 	}
+	else {
+		GetCharacterMovement()->AirControl = 0.f;
+		FVector LaunchForce = FVector(-1.f, 0.f, 1.f) * 400.f;
+		LaunchCharacter(LaunchForce, true, true);
+
+		GetWorld()->GetTimerManager().SetTimer(LoopTimerHandle, this, &ABasePaperCharacter::OnKnockbackEnd, 1.5f, false);
+	}
 }
+
 
 void ABasePaperCharacter::OnAnimationEnd()
 {
 	GetSprite()->Stop();
+}
+
+void ABasePaperCharacter::OnKnockbackEnd()
+{
+	GetCharacterMovement()->AirControl = AirControl;
 }
 
 

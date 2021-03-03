@@ -26,9 +26,14 @@ private:
 		UPaperFlipbook* DeathAnimation;
 
 
-	// Death Animation Handler
 	FTimerHandle LoopTimerHandle;
+
+	// Death Animation Handler
 	void OnAnimationEnd();
+
+	// Knockback End
+	void OnKnockbackEnd();
+
 
 
 protected:
@@ -48,6 +53,20 @@ protected:
 		void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 	UFUNCTION(BlueprintImplementableEvent)
 		void OnHit_BP();
+
+	// Controls variables
+	UPROPERTY(EditAnywhere, Category = "Controls")
+		float GravityScale;
+	UPROPERTY(EditAnywhere, Category = "Controls")
+		float AirControl;
+	UPROPERTY(EditAnywhere, Category = "Controls")
+		float JumpZVelocity;
+	UPROPERTY(EditAnywhere, Category = "Controls")
+		float GroundFriction;
+	UPROPERTY(EditAnywhere, Category = "Controls")
+		float MaxWalkSpeed;
+	UPROPERTY(EditAnywhere, Category = "Controls")
+		float MaxFlySpeed;
 
 
 public:

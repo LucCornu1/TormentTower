@@ -4,7 +4,6 @@
 #include "PlayerPaperCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
 
 
 // Sets default values
@@ -29,22 +28,6 @@ APlayerPaperCharacter::APlayerPaperCharacter()
 	CameraComponent->SetupAttachment(CameraBoom);
 
 
-	// Configure character movement
-	GravityScale = 2.0f;
-	AirControl = 1.0f;
-	JumpZVelocity = 1000.f;
-	GroundFriction = 0.80f;
-	MaxWalkSpeed = 800.0f;
-	MaxFlySpeed = 1000.0f;
-
-	GetCharacterMovement()->GravityScale = GravityScale;
-	GetCharacterMovement()->AirControl = AirControl;
-	GetCharacterMovement()->JumpZVelocity = JumpZVelocity;
-	GetCharacterMovement()->GroundFriction = GroundFriction;
-	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
-	GetCharacterMovement()->MaxFlySpeed = MaxFlySpeed;
-
-
 	MaxHP = 4.f;
 	CurrentHP = MaxHP;
 }
@@ -53,6 +36,7 @@ APlayerPaperCharacter::APlayerPaperCharacter()
 void APlayerPaperCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
 // Called every frame
