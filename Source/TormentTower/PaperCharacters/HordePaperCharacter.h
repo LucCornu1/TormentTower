@@ -15,9 +15,6 @@ class TORMENTTOWER_API AHordePaperCharacter : public ABasePaperCharacter
 	GENERATED_BODY()
 	
 private:
-	// MoveFunction
-	UFUNCTION(BlueprintCallable, Category = "MoveFunction")
-		void MoveRight(float AxisValue);
 
 
 protected:

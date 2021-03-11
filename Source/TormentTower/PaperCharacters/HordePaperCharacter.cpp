@@ -26,9 +26,3 @@ void AHordePaperCharacter::Tick(float DeltaTime)
 
 	MoveRight(1.f);
 }
-
-
-void AHordePaperCharacter::MoveRight(float AxisValue)
-{
-	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
-}

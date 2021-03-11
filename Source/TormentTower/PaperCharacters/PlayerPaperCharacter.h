@@ -24,8 +24,7 @@ private:
 		USpringArmComponent* CameraBoom;
 
 	// MoveFunction
-	UFUNCTION(BlueprintCallable, Category = "MoveFunction")
-		void MoveRight(float AxisValue);
+	void MoveRight(float AxisValue) override;
 
 
 protected:

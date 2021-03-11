@@ -24,6 +24,9 @@ private:
 	// The animation to play when the character dies
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
 		UPaperFlipbook* DeathAnimation;
+	// The animation to play when the character dies
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+		UPaperFlipbook* AttackAnimation;
 
 
 	FTimerHandle LoopTimerHandle;
@@ -34,6 +37,8 @@ private:
 	// Knockback End
 	void OnKnockbackEnd();
 
+	// Attack Animation Handler
+	void OnAttackEnd();
 
 
 protected:
@@ -46,6 +51,9 @@ protected:
 
 	// Character Stats
 	bool bIsDead;
+	bool bCanBeDamage;
+	bool bIsAttacking;
+
 	float MaxHP;
 	float CurrentHP;
 
@@ -69,6 +77,11 @@ protected:
 		float MaxFlySpeed;
 
 
+	// MoveFunction
+	UFUNCTION(BlueprintCallable, Category = "ControlFunctions")
+		virtual void MoveRight(float AxisValue);
+
+
 public:
 	// Sets default values for this character's properties
 	ABasePaperCharacter();
@@ -81,4 +94,8 @@ public:
 	/** Assessor for the CurrentHP variable */
 	UFUNCTION(BlueprintPure, Category = "HUD")
 		float GetCurrentHP();
+
+	// AttackFunction
+	UFUNCTION(BlueprintCallable, Category = "ControlFunctions")
+		void Attack();
 };
