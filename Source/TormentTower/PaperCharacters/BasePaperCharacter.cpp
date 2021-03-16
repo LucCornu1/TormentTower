@@ -140,7 +140,7 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("%f"), VectorKnockbackDirection.Y));
 			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("%f"), VectorKnockbackDirection.Z));
 
-			FVector LaunchForce = -VectorKnockbackDirection * 2000.f;
+			FVector LaunchForce = -VectorKnockbackDirection * 1500.f;
 			LaunchCharacter(LaunchForce, true, true);
 		}
 
@@ -164,7 +164,6 @@ void ABasePaperCharacter::OnAttackEnd()
 {
 	bIsAttacking = false;
 	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
-
 }
 
 
@@ -181,6 +180,11 @@ void ABasePaperCharacter::MoveRight(float AxisValue)
 
 void ABasePaperCharacter::Attack()
 {
+	if (bIsAttacking)
+	{
+		return;
+	}
+
 	bIsAttacking = true;
 	GetCharacterMovement()->MaxWalkSpeed = 0.f;
 
