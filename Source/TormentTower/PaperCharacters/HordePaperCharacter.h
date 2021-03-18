@@ -22,6 +22,9 @@ protected:
 	virtual void BeginPlay() override;
 
 
+	float ForwardAxisValue;
+
+
 public:
 	// Sets default values for this character's properties
 	AHordePaperCharacter();

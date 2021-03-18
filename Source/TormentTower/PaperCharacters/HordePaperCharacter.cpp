@@ -17,6 +17,9 @@ void AHordePaperCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	ForwardAxisValue = GetActorForwardVector().X;
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%f"), ForwardAxisValue));
 }
 
 // Called every frame
@@ -24,5 +27,5 @@ void AHordePaperCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	MoveRight(1.f);
+	MoveRight(ForwardAxisValue);
 }

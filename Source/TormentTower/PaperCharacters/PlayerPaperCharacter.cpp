@@ -26,10 +26,6 @@ APlayerPaperCharacter::APlayerPaperCharacter()
 	CameraComponent->ProjectionMode = ECameraProjectionMode::Orthographic;
 	CameraComponent->OrthoWidth = 2000.0f; // Distance de vue entre la caméra et le joueur
 	CameraComponent->SetupAttachment(CameraBoom);
-
-
-	MaxHP = 4.f;
-	CurrentHP = MaxHP;
 }
 
 // Called when the game starts or when spawned
@@ -67,4 +63,10 @@ void APlayerPaperCharacter::MoveRight(float AxisValue)
 	}
 
 	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
+}
+
+
+void APlayerPaperCharacter::DeathHandle()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("ScreenDebug_DeathHandle_Message")));
 }
