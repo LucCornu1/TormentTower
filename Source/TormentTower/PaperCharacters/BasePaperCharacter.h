@@ -54,7 +54,8 @@ protected:
 	bool bCanBeDamage;
 	bool bIsAttacking;
 
-	float MaxHP;
+	UPROPERTY(EditAnywhere, Category = "Character Stats")
+		float MaxHP;
 	float CurrentHP;
 
 	UFUNCTION()
@@ -81,6 +82,9 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "ControlFunctions")
 		virtual void MoveRight(float AxisValue);
 
+	// DeathHandle
+	virtual void DeathHandle();
+
 
 public:
 	// Sets default values for this character's properties
@@ -94,6 +98,10 @@ public:
 	/** Assessor for the CurrentHP variable */
 	UFUNCTION(BlueprintPure, Category = "HUD")
 		float GetCurrentHP();
+
+	/** Assessor for the bIsAttacking variable */
+	UFUNCTION(BlueprintPure, Category = "Character Stats")
+		bool GetIsAttacking();
 
 	// AttackFunction
 	UFUNCTION(BlueprintCallable, Category = "ControlFunctions")

@@ -18,6 +18,9 @@ ABasePaperCharacter::ABasePaperCharacter()
 	bCanBeDamage = true;
 	bIsAttacking = false;
 
+	MaxHP = 4.f;
+	CurrentHP = MaxHP;
+
 
 	// Configure character movement
 	GravityScale = 2.0f;
@@ -103,11 +106,11 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 		return;
 	}
 
-	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%d"), bCanBeDamage));
-
 	bCanBeDamage = false;
 	CurrentHP = FMath::Clamp(CurrentHP - Damage, 0.f, MaxHP);
 	OnHit_BP();
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%f"), CurrentHP));
 
 	if (CurrentHP <= 0.f)
 	{
@@ -140,7 +143,7 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("%f"), VectorKnockbackDirection.Y));
 			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("%f"), VectorKnockbackDirection.Z));
 
-			FVector LaunchForce = -VectorKnockbackDirection * 1500.f;
+			FVector LaunchForce = -VectorKnockbackDirection * 900.f;
 			LaunchCharacter(LaunchForce, true, true);
 		}
 
@@ -152,6 +155,7 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 void ABasePaperCharacter::OnAnimationEnd()
 {
 	GetSprite()->Stop();
+	DeathHandle();
 }
 
 void ABasePaperCharacter::OnKnockbackEnd()
@@ -170,6 +174,11 @@ void ABasePaperCharacter::OnAttackEnd()
 float ABasePaperCharacter::GetCurrentHP()
 {
 	return this->CurrentHP;
+}
+
+bool ABasePaperCharacter::GetIsAttacking()
+{
+	return bIsAttacking;
 }
 
 
@@ -196,4 +205,9 @@ void ABasePaperCharacter::Attack()
 	FlipbookLengthInSeconds -= 0.1f;
 
 	GetWorld()->GetTimerManager().SetTimer(LoopTimerHandle, this, &ABasePaperCharacter::OnAttackEnd, FlipbookLengthInSeconds, false);
+}
+
+void ABasePaperCharacter::DeathHandle()
+{
+	Destroy();
 }

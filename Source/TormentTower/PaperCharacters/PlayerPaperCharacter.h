@@ -32,6 +32,10 @@ protected:
 	virtual void BeginPlay() override;
 
 
+	// DeathHandle Override
+	void DeathHandle() override;
+
+
 public:
 	// Sets default values for this character's properties
 	APlayerPaperCharacter();
@@ -41,5 +45,4 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 };
