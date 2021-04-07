@@ -10,6 +10,7 @@ AHordePaperCharacter::AHordePaperCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	bCanBeKnockback = false;
 }
 
 // Called when the game starts or when spawned
@@ -19,7 +20,7 @@ void AHordePaperCharacter::BeginPlay()
 
 	ForwardAxisValue = GetActorForwardVector().X;
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%f"), ForwardAxisValue));
+	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%f"), ForwardAxisValue));
 }
 
 // Called every frame

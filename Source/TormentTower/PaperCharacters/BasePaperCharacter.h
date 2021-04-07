@@ -53,6 +53,7 @@ protected:
 	bool bIsDead;
 	bool bCanBeDamage;
 	bool bIsAttacking;
+	bool bCanBeKnockback;
 
 	UPROPERTY(EditAnywhere, Category = "Character Stats")
 		float MaxHP;
