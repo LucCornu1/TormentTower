@@ -17,6 +17,7 @@ ABasePaperCharacter::ABasePaperCharacter()
 	bIsDead = false;
 	bCanBeDamage = true;
 	bIsAttacking = false;
+	bCanBeKnockback = true;
 
 	MaxHP = 4.f;
 	CurrentHP = MaxHP;
@@ -74,13 +75,13 @@ void ABasePaperCharacter::UpdateCharacter()
 	// Set the rotation so that the character faces his direction of travel.
 	if (Controller != nullptr)
 	{
-		if (TravelDirection < 0.0f)
+		if (TravelDirection < 0.f)
 		{
-			Controller->SetControlRotation(FRotator(0.0, 180.0f, 0.0f));
+			Controller->SetControlRotation(FRotator(0.f, 180.f, 0.f));
 		}
-		else if (TravelDirection > 0.0f)
+		else if (TravelDirection > 0.f)
 		{
-			Controller->SetControlRotation(FRotator(0.0f, 0.0f, 0.0f));
+			Controller->SetControlRotation(FRotator(0.f, 0.f, 0.f));
 		}
 	}
 }
@@ -125,7 +126,7 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 		GetWorld()->GetTimerManager().SetTimer(LoopTimerHandle, this, &ABasePaperCharacter::OnAnimationEnd, FlipbookLengthInSeconds, false);
 	}
 	else {
-		if (!DamageCauser)
+		if (!DamageCauser || !bCanBeKnockback)
 		{
 			// Nothing
 		}
