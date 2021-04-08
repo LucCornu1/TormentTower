@@ -23,7 +23,6 @@ protected:
 
 	void DoLineTrace();
 
-
 	float ForwardAxisValue;
 
 
