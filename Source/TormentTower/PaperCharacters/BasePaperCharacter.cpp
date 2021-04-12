@@ -20,7 +20,6 @@ ABasePaperCharacter::ABasePaperCharacter()
 	bCanBeKnockback = true;
 
 	MaxHP = 4.f;
-	CurrentHP = MaxHP;
 
 
 	// Configure character movement
@@ -44,6 +43,7 @@ void ABasePaperCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CurrentHP = MaxHP;
 	this->OnTakeAnyDamage.AddDynamic(this, &ABasePaperCharacter::TakeDamage);
 }
 

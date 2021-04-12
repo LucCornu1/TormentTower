@@ -17,7 +17,7 @@ class TORMENTTOWER_API AStartVolume : public APaperSpriteActor
 	
 private:
 	// Safe Zone, when the player Exit it, the Horde spawns
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		UBoxComponent* BoxComponent;
 
 	// Contains the path for the Horde Blueprints
