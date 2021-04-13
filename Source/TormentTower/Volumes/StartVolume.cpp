@@ -22,6 +22,7 @@ AStartVolume::AStartVolume()
 	}
 
 	bHordeSpawned = false;
+	SpawnDelayTimer = 1.f;
 }
 
 // Called when the game starts or when spawned
@@ -53,10 +54,7 @@ void AStartVolume::OnExitSafeZone(UPrimitiveComponent* OverlappedComp, AActor* O
 		{
 			bHordeSpawned = true;
 
-			FVector Location(645.f, 13.5f, -200.f);
-			FRotator Rotation(0.f, 0.f, 0.f);
-			FActorSpawnParameters SpawnInfo;
-			GetWorld()->SpawnActor<AHordePaperCharacter>(HordeBlueprint, Location, Rotation, SpawnInfo);
+			GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &AStartVolume::OnSpawnTimerEnd, SpawnDelayTimer, false);
 		}
 	}
 }
@@ -65,4 +63,13 @@ void AStartVolume::OnExitSafeZone(UPrimitiveComponent* OverlappedComp, AActor* O
 void AStartVolume::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+// Called after x seconds to spawn the Horde
+void AStartVolume::OnSpawnTimerEnd()
+{
+	FVector Location = this->GetActorLocation();
+	FRotator Rotation = this->GetActorRotation();
+	FActorSpawnParameters SpawnInfo;
+	GetWorld()->SpawnActor<AHordePaperCharacter>(HordeBlueprint, Location, Rotation, SpawnInfo);
 }

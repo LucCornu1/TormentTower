@@ -25,6 +25,16 @@ private:
 
 	bool bHordeSpawned;
 
+	// TimerHandlers
+	FTimerHandle SpawnTimerHandle;
+
+	// OnEndTimer functions
+	void OnSpawnTimerEnd();
+
+	/** Variable that dictate how long the Horde takes to spawn */
+	UPROPERTY(EditAnywhere, Category = "SpawnOptions", meta = (AllowPrivateAcces = "true"))
+		float SpawnDelayTimer;
+
 
 protected:
 	// Called when the game starts or when spawned

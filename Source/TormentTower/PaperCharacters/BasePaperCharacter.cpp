@@ -20,6 +20,7 @@ ABasePaperCharacter::ABasePaperCharacter()
 	bCanBeKnockback = true;
 
 	MaxHP = 4.f;
+	BruteForce = 0.f;
 
 
 	// Configure character movement
@@ -131,7 +132,9 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 			// Nothing
 		}
 		else {
-			FVector VectorKnockbackDirection = DamageCauser->GetActorLocation() - this->GetActorLocation();
+			ABasePaperCharacter* Damager = dynamic_cast<ABasePaperCharacter*>(DamageCauser);
+
+			FVector VectorKnockbackDirection = Damager->GetActorLocation() - this->GetActorLocation();
 			GetCharacterMovement()->AirControl = 0.f;
 
 			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("%f"), VectorKnockbackDirection.X));
@@ -144,7 +147,9 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("%f"), VectorKnockbackDirection.Y));
 			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("%f"), VectorKnockbackDirection.Z));
 
-			FVector LaunchForce = -VectorKnockbackDirection * 900.f;
+			FVector LaunchForce = -VectorKnockbackDirection * Damager->BruteForce * 10.f;
+			LaunchForce.Z = Damager->BruteForce * 10;
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("%f"), Damager->BruteForce));
 			LaunchCharacter(LaunchForce, true, true);
 		}
 
@@ -188,7 +193,7 @@ void ABasePaperCharacter::MoveRight(float AxisValue)
 	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
 }
 
-void ABasePaperCharacter::Attack()
+void ABasePaperCharacter::Attack(bool bSpecialAttack)
 {
 	if (bIsAttacking)
 	{
@@ -200,12 +205,19 @@ void ABasePaperCharacter::Attack()
 
 	float FlipbookLengthInSeconds;
 
-	GetSprite()->SetFlipbook(AttackAnimation);
+	if (!bSpecialAttack)
+	{
+		GetSprite()->SetFlipbook(AttackAnimation);
+	}
+	else {
+		GetSprite()->SetFlipbook(SpecialAttackAnimation);
+	}
+	
 
 	FlipbookLengthInSeconds = GetSprite()->GetFlipbookLength();
 	FlipbookLengthInSeconds -= 0.1f;
 
-	GetWorld()->GetTimerManager().SetTimer(LoopTimerHandle, this, &ABasePaperCharacter::OnAttackEnd, FlipbookLengthInSeconds, false);
+	GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle, this, &ABasePaperCharacter::OnAttackEnd, FlipbookLengthInSeconds, false);
 }
 
 void ABasePaperCharacter::DeathHandle()
