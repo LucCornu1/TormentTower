@@ -51,7 +51,7 @@ void APlayerPaperCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ABasePaperCharacter::Attack);
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerPaperCharacter::PlayerAttack);
 }
 
 
@@ -69,4 +69,10 @@ void APlayerPaperCharacter::MoveRight(float AxisValue)
 void APlayerPaperCharacter::DeathHandle()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("ScreenDebug_DeathHandle_Message")));
+}
+
+
+void APlayerPaperCharacter::PlayerAttack()
+{
+	Attack();
 }

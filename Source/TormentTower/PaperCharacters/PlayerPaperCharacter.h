@@ -26,6 +26,9 @@ private:
 	// MoveFunction
 	void MoveRight(float AxisValue) override;
 
+	// PlayerAttack Function
+	void PlayerAttack();
+
 
 protected:
 	// Called when the game starts or when spawned
