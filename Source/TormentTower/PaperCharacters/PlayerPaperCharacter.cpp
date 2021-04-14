@@ -24,7 +24,7 @@ APlayerPaperCharacter::APlayerPaperCharacter()
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SideViewCamera"));
 	CameraComponent->ProjectionMode = ECameraProjectionMode::Orthographic;
-	CameraComponent->OrthoWidth = 2000.0f; // Distance de vue entre la caméra et le joueur
+	CameraComponent->OrthoWidth = 2000.0f; // Distance de vue entre la camÃ©ra et le joueur
 	CameraComponent->SetupAttachment(CameraBoom);
 }
 
@@ -76,3 +76,4 @@ void APlayerPaperCharacter::PlayerAttack()
 {
 	Attack();
 }
+

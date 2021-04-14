@@ -37,6 +37,7 @@ protected:
 	UFUNCTION()
 		void OnEnterDeathZone(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+
 public:
 	// Sets default values for this character's properties
 	AHordePaperCharacter();
