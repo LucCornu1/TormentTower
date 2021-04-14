@@ -45,6 +45,7 @@ void ABasePaperCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	CurrentHP = MaxHP;
+
 	this->OnTakeAnyDamage.AddDynamic(this, &ABasePaperCharacter::TakeDamage);
 }
 
