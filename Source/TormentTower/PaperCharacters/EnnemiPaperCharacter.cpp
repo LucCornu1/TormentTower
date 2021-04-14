@@ -18,6 +18,7 @@ void AEnnemiPaperCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	ForwardAxisValue = GetActorForwardVector().X;
+	bWallDetected = false;
 
 	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%f"), ForwardAxisValue));
 }
@@ -27,24 +28,9 @@ void AEnnemiPaperCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	DoLineTrace();
+	bWallDetected = DoLineTrace();
 
-	ForwardAxisValue = GetActorForwardVector().X;
-	MoveRight(ForwardAxisValue);
-}
-
-
-void AEnnemiPaperCharacter::DoLineTrace()
-{
-	FHitResult Hit;
-
-	const float DetectionRange = 50.f;
-	const FVector StartTrace = this->GetActorLocation();
-	const FVector EndTrace = (this->GetActorForwardVector() * DetectionRange) + StartTrace;
-
-	FCollisionQueryParams QueryParams = FCollisionQueryParams(SCENE_QUERY_STAT(Test), false, this);
-
-	if (GetWorld()->LineTraceSingleByChannel(Hit, StartTrace, EndTrace, ECC_Visibility, QueryParams))
+	if (bWallDetected)
 	{
 		if (ForwardAxisValue < 0.f)
 		{
@@ -54,8 +40,38 @@ void AEnnemiPaperCharacter::DoLineTrace()
 		{
 			this->SetActorRotation(FRotator(0.f, 180.f, 0.f));
 		}
-		
+	}
+
+	ForwardAxisValue = GetActorForwardVector().X;
+	MoveRight(ForwardAxisValue);
+}
+
+
+bool AEnnemiPaperCharacter::DoLineTrace()
+{
+	FHitResult Hit;
+
+	const float DetectionRange = 100.f;
+	const FVector StartTrace = this->GetActorLocation();
+	const FVector EndTrace = (this->GetActorForwardVector() * DetectionRange) + StartTrace;
+
+	FCollisionQueryParams QueryParams = FCollisionQueryParams(SCENE_QUERY_STAT(Test), false, this);
+
+	if (GetWorld()->LineTraceSingleByChannel(Hit, StartTrace, EndTrace, ECC_Visibility, QueryParams))
+	{
+		/*if (ForwardAxisValue < 0.f)
+		{
+			this->SetActorRotation(FRotator(0.f, 0.f, 0.f));
+		}
+		else if (ForwardAxisValue > 0.f)
+		{
+			this->SetActorRotation(FRotator(0.f, 180.f, 0.f));
+		}*/
 
 		DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(255, 0, 0), false);
+
+		return true;
 	}
+
+	return false;
 }

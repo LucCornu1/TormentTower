@@ -24,12 +24,16 @@ private:
 	// The animation to play when the character dies
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
 		UPaperFlipbook* DeathAnimation;
-	// The animation to play when the character dies
+	// The animation to play when the character attacks
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
 		UPaperFlipbook* AttackAnimation;
+	// The animation to play when the character activate his special attack
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+		UPaperFlipbook* SpecialAttackAnimation;
 
 
 	FTimerHandle LoopTimerHandle;
+	FTimerHandle AttackTimerHandle;
 
 	// Death Animation Handler
 	void OnAnimationEnd();
@@ -58,6 +62,11 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Character Stats")
 		float MaxHP;
 	float CurrentHP;
+
+	UPROPERTY(EditAnywhere, Category = "Character Stats")
+		float BruteForce;
+
+	// Damage functions
 
 	UFUNCTION()
 		void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
@@ -104,7 +113,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Character Stats")
 		bool GetIsAttacking();
 
-	// AttackFunction
+	// AttackAnimationFunction
 	UFUNCTION(BlueprintCallable, Category = "ControlFunctions")
-		void Attack();
+		void Attack(bool bSpecialAttack = false);
 };

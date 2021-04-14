@@ -26,11 +26,12 @@ private:
 	// MoveFunction
 	void MoveRight(float AxisValue) override;
 
+	// PlayerAttack Function
+	void PlayerAttack();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
 
 	// DeathHandle Override
 	void DeathHandle() override;
@@ -45,4 +46,6 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+
 };

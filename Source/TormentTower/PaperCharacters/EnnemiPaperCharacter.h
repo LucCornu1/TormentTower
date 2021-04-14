@@ -15,14 +15,14 @@ class TORMENTTOWER_API AEnnemiPaperCharacter : public ABasePaperCharacter
 	GENERATED_BODY()
 	
 private:
+	bool bWallDetected;
 
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void DoLineTrace();
-
+	bool DoLineTrace();
 
 	float ForwardAxisValue;
 
