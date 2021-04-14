@@ -24,9 +24,16 @@ private:
 	// The animation to play when the character dies
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
 		UPaperFlipbook* DeathAnimation;
+	// The animation to play when the character attacks
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+		UPaperFlipbook* AttackAnimation;
+	// The animation to play when the character activate his special attack
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations", meta = (AllowPrivateAccess = "true"))
+		UPaperFlipbook* SpecialAttackAnimation;
 
 
 	FTimerHandle LoopTimerHandle;
+	FTimerHandle AttackTimerHandle;
 
 	// Death Animation Handler
 	void OnAnimationEnd();
@@ -34,6 +41,8 @@ private:
 	// Knockback End
 	void OnKnockbackEnd();
 
+	// Attack Animation Handler
+	void OnAttackEnd();
 
 
 protected:
@@ -46,8 +55,18 @@ protected:
 
 	// Character Stats
 	bool bIsDead;
-	float MaxHP;
+	bool bCanBeDamage;
+	bool bIsAttacking;
+	bool bCanBeKnockback;
+
+	UPROPERTY(EditAnywhere, Category = "Character Stats")
+		float MaxHP;
 	float CurrentHP;
+
+	UPROPERTY(EditAnywhere, Category = "Character Stats")
+		float BruteForce;
+
+	// Damage functions
 
 	UFUNCTION()
 		void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
@@ -69,6 +88,14 @@ protected:
 		float MaxFlySpeed;
 
 
+	// MoveFunction
+	UFUNCTION(BlueprintCallable, Category = "ControlFunctions")
+		virtual void MoveRight(float AxisValue);
+
+	// DeathHandle
+	virtual void DeathHandle();
+
+
 public:
 	// Sets default values for this character's properties
 	ABasePaperCharacter();
@@ -81,4 +108,12 @@ public:
 	/** Assessor for the CurrentHP variable */
 	UFUNCTION(BlueprintPure, Category = "HUD")
 		float GetCurrentHP();
+
+	/** Assessor for the bIsAttacking variable */
+	UFUNCTION(BlueprintPure, Category = "Character Stats")
+		bool GetIsAttacking();
+
+	// AttackAnimationFunction
+	UFUNCTION(BlueprintCallable, Category = "ControlFunctions")
+		void Attack(bool bSpecialAttack = false);
 };

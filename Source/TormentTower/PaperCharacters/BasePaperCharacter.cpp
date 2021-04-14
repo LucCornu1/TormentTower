@@ -15,6 +15,12 @@ ABasePaperCharacter::ABasePaperCharacter()
 
 	// Default stats value
 	bIsDead = false;
+	bCanBeDamage = true;
+	bIsAttacking = false;
+	bCanBeKnockback = true;
+
+	MaxHP = 4.f;
+	BruteForce = 0.f;
 
 
 	// Configure character movement
@@ -38,6 +44,8 @@ void ABasePaperCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CurrentHP = MaxHP;
+
 	this->OnTakeAnyDamage.AddDynamic(this, &ABasePaperCharacter::TakeDamage);
 }
 
@@ -57,8 +65,11 @@ void ABasePaperCharacter::UpdateCharacter()
 		return;
 	}
 
-	// Update animation to match the motion
-	UpdateAnimation();
+	if (!bIsAttacking)
+	{
+		// Update animation to match the motion
+		UpdateAnimation();
+	}
 
 	// Now setup the rotation of the controller based on the direction we are travelling
 	const FVector PlayerVelocity = GetVelocity();
@@ -66,13 +77,13 @@ void ABasePaperCharacter::UpdateCharacter()
 	// Set the rotation so that the character faces his direction of travel.
 	if (Controller != nullptr)
 	{
-		if (TravelDirection < 0.0f)
+		if (TravelDirection < 0.f)
 		{
-			Controller->SetControlRotation(FRotator(0.0, 180.0f, 0.0f));
+			Controller->SetControlRotation(FRotator(0.f, 180.f, 0.f));
 		}
-		else if (TravelDirection > 0.0f)
+		else if (TravelDirection > 0.f)
 		{
-			Controller->SetControlRotation(FRotator(0.0f, 0.0f, 0.0f));
+			Controller->SetControlRotation(FRotator(0.f, 0.f, 0.f));
 		}
 	}
 }
@@ -88,28 +99,26 @@ void ABasePaperCharacter::UpdateAnimation()
 	{
 		GetSprite()->SetFlipbook(DesiredAnimation);
 	}
-
 }
 
 
 void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-	if (Damage <= 0)
+	if (Damage <= 0 || bIsDead || !bCanBeDamage)
 	{
 		return;
 	}
 
+	bCanBeDamage = false;
 	CurrentHP = FMath::Clamp(CurrentHP - Damage, 0.f, MaxHP);
-
-	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%f"), CurrentHP));
-
 	OnHit_BP();
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%f"), CurrentHP));
 
 	if (CurrentHP <= 0.f)
 	{
-		float FlipbookLengthInSeconds;
-
 		bIsDead = true;
+		float FlipbookLengthInSeconds;
 
 		UPaperFlipbook* DesiredAnimation = DeathAnimation;
 		GetSprite()->SetFlipbook(DesiredAnimation);
@@ -119,11 +128,33 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 		GetWorld()->GetTimerManager().SetTimer(LoopTimerHandle, this, &ABasePaperCharacter::OnAnimationEnd, FlipbookLengthInSeconds, false);
 	}
 	else {
-		GetCharacterMovement()->AirControl = 0.f;
-		FVector LaunchForce = FVector(-1.f, 0.f, 1.f) * 400.f;
-		LaunchCharacter(LaunchForce, true, true);
+		if (!DamageCauser || !bCanBeKnockback)
+		{
+			// Nothing
+		}
+		else {
+			ABasePaperCharacter* Damager = dynamic_cast<ABasePaperCharacter*>(DamageCauser);
 
-		GetWorld()->GetTimerManager().SetTimer(LoopTimerHandle, this, &ABasePaperCharacter::OnKnockbackEnd, 1.5f, false);
+			FVector VectorKnockbackDirection = Damager->GetActorLocation() - this->GetActorLocation();
+			GetCharacterMovement()->AirControl = 0.f;
+
+			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("%f"), VectorKnockbackDirection.X));
+			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, FString::Printf(TEXT("%f"), VectorKnockbackDirection.Y));
+			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Silver, FString::Printf(TEXT("%f"), VectorKnockbackDirection.Z));
+
+			VectorKnockbackDirection.Normalize(0.f);
+
+			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%f"), VectorKnockbackDirection.X));
+			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("%f"), VectorKnockbackDirection.Y));
+			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("%f"), VectorKnockbackDirection.Z));
+
+			FVector LaunchForce = -VectorKnockbackDirection * Damager->BruteForce * 10.f;
+			LaunchForce.Z = Damager->BruteForce * 10;
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("%f"), Damager->BruteForce));
+			LaunchCharacter(LaunchForce, true, true);
+		}
+
+		GetWorld()->GetTimerManager().SetTimer(LoopTimerHandle, this, &ABasePaperCharacter::OnKnockbackEnd, 1.f, false);
 	}
 }
 
@@ -131,15 +162,66 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 void ABasePaperCharacter::OnAnimationEnd()
 {
 	GetSprite()->Stop();
+	DeathHandle();
 }
 
 void ABasePaperCharacter::OnKnockbackEnd()
 {
 	GetCharacterMovement()->AirControl = AirControl;
+	bCanBeDamage = true;
+}
+
+void ABasePaperCharacter::OnAttackEnd()
+{
+	bIsAttacking = false;
+	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
 }
 
 
 float ABasePaperCharacter::GetCurrentHP()
 {
 	return this->CurrentHP;
+}
+
+bool ABasePaperCharacter::GetIsAttacking()
+{
+	return bIsAttacking;
+}
+
+
+void ABasePaperCharacter::MoveRight(float AxisValue)
+{
+	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
+}
+
+void ABasePaperCharacter::Attack(bool bSpecialAttack)
+{
+	if (bIsAttacking)
+	{
+		return;
+	}
+
+	bIsAttacking = true;
+	GetCharacterMovement()->MaxWalkSpeed = 0.f;
+
+	float FlipbookLengthInSeconds;
+
+	if (!bSpecialAttack)
+	{
+		GetSprite()->SetFlipbook(AttackAnimation);
+	}
+	else {
+		GetSprite()->SetFlipbook(SpecialAttackAnimation);
+	}
+	
+
+	FlipbookLengthInSeconds = GetSprite()->GetFlipbookLength();
+	FlipbookLengthInSeconds -= 0.1f;
+
+	GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle, this, &ABasePaperCharacter::OnAttackEnd, FlipbookLengthInSeconds, false);
+}
+
+void ABasePaperCharacter::DeathHandle()
+{
+	Destroy();
 }

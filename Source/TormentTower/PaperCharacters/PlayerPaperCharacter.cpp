@@ -24,12 +24,8 @@ APlayerPaperCharacter::APlayerPaperCharacter()
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SideViewCamera"));
 	CameraComponent->ProjectionMode = ECameraProjectionMode::Orthographic;
-	CameraComponent->OrthoWidth = 1600.0f; // Distance de vue entre la caméra et le joueur
+	CameraComponent->OrthoWidth = 2000.0f; // Distance de vue entre la camÃ©ra et le joueur
 	CameraComponent->SetupAttachment(CameraBoom);
-
-
-	MaxHP = 4.f;
-	CurrentHP = MaxHP;
 }
 
 // Called when the game starts or when spawned
@@ -55,6 +51,7 @@ void APlayerPaperCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerPaperCharacter::PlayerAttack);
 }
 
 
@@ -67,3 +64,16 @@ void APlayerPaperCharacter::MoveRight(float AxisValue)
 
 	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
 }
+
+
+void APlayerPaperCharacter::DeathHandle()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("ScreenDebug_DeathHandle_Message")));
+}
+
+
+void APlayerPaperCharacter::PlayerAttack()
+{
+	Attack();
+}
+
