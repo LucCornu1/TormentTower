@@ -4,6 +4,7 @@
 #include "PlayerPaperCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 
 
 // Sets default values
@@ -14,6 +15,7 @@ APlayerPaperCharacter::APlayerPaperCharacter()
 
 
 	// Default Components value
+	/*
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("Camera Boom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 1000.0f; // Longueur du bras
@@ -26,6 +28,7 @@ APlayerPaperCharacter::APlayerPaperCharacter()
 	CameraComponent->ProjectionMode = ECameraProjectionMode::Orthographic;
 	CameraComponent->OrthoWidth = 2000.0f; // Distance de vue entre la caméra et le joueur
 	CameraComponent->SetupAttachment(CameraBoom);
+	*/
 }
 
 // Called when the game starts or when spawned
@@ -68,7 +71,10 @@ void APlayerPaperCharacter::MoveRight(float AxisValue)
 
 void APlayerPaperCharacter::DeathHandle()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("ScreenDebug_DeathHandle_Message")));
+	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("ScreenDebug_DeathHandle_Message")));
+
+	UCapsuleComponent* Capsule = this->GetCapsuleComponent();
+	Capsule->SetCollisionProfileName(TEXT("NoCollision"));
 }
 
 
