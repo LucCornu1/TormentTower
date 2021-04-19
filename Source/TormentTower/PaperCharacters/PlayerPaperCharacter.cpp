@@ -57,7 +57,6 @@ void APlayerPaperCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerPaperCharacter::PlayerAttack);
 }
 
-
 void APlayerPaperCharacter::MoveRight(float AxisValue)
 {
 	if (bIsDead)
@@ -68,7 +67,6 @@ void APlayerPaperCharacter::MoveRight(float AxisValue)
 	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
 }
 
-
 void APlayerPaperCharacter::DeathHandle()
 {
 	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("ScreenDebug_DeathHandle_Message")));
@@ -77,9 +75,19 @@ void APlayerPaperCharacter::DeathHandle()
 	Capsule->SetCollisionProfileName(TEXT("NoCollision"));
 }
 
-
 void APlayerPaperCharacter::PlayerAttack()
 {
 	Attack();
 }
 
+void APlayerPaperCharacter::SetPlayerNumber(int Number)
+{
+	this->PlayerNumber = Number;
+
+	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%d"),this->PlayerNumber));
+}
+
+int APlayerPaperCharacter::GetPlayerNumber()
+{
+	return this->PlayerNumber;
+}

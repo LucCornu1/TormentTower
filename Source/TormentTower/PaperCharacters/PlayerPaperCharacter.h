@@ -29,6 +29,10 @@ private:
 	// PlayerAttack Function
 	void PlayerAttack();
 
+	// Number of the Player
+	int PlayerNumber;
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -47,5 +51,11 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// Setter for PlayerNumber
+	UFUNCTION(BlueprintCallable, Category = "Setter")
+		void SetPlayerNumber(int Number);
 
+	// Getter fot PlayerNumber
+	UFUNCTION(BlueprintPure, Category = "Getter")
+		int GetPlayerNumber();
 };
