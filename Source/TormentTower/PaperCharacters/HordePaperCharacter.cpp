@@ -62,6 +62,14 @@ void AHordePaperCharacter::OnEnterDangerZone(UPrimitiveComponent* OverlappedComp
 	{
 		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("DESTROY !!")));
 
+		TArray<AActor*> AttachedActors;
+		OtherActor->GetAttachedActors(AttachedActors, true);
+
+		for (int i = 0; i < AttachedActors.Num(); i++)
+		{
+			AttachedActors[i]->Destroy();
+		}
+
 		OtherActor->Destroy();
 	}
 
