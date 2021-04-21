@@ -23,19 +23,14 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 		USpringArmComponent* CameraBoom;
 
-	// MoveFunction
-	void MoveRight(float AxisValue) override;
-
-	// PlayerAttack Function
-	void PlayerAttack();
-
 	// Number of the Player
-	int PlayerNumber;
+	UPROPERTY(VisibleAnywhere, Category = "Player Number")
+		int PlayerNumber;
 
 
 protected:
 	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	void BeginPlay() override;
 
 	// DeathHandle Override
 	void DeathHandle() override;
@@ -46,10 +41,10 @@ public:
 	APlayerPaperCharacter();
 
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	// Setter for PlayerNumber
 	UFUNCTION(BlueprintCallable, Category = "Setter")
@@ -58,4 +53,13 @@ public:
 	// Getter fot PlayerNumber
 	UFUNCTION(BlueprintPure, Category = "Getter")
 		int GetPlayerNumber();
+
+
+	/** Controls functions */
+
+	// PlayerAttack Function
+	void PlayerAttack();
+
+	// MoveFunction
+	void MoveRight(float AxisValue) override;
 };

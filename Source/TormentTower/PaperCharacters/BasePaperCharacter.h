@@ -87,13 +87,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Controls")
 		float MaxFlySpeed;
 
+	// DeathHandle
+	virtual void DeathHandle();
 
 	// MoveFunction
 	UFUNCTION(BlueprintCallable, Category = "ControlFunctions")
 		virtual void MoveRight(float AxisValue);
-
-	// DeathHandle
-	virtual void DeathHandle();
 
 
 public:

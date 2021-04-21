@@ -58,10 +58,9 @@ void AHordePaperCharacter::OnEnterDangerZone(UPrimitiveComponent* OverlappedComp
 			UGameplayStatics::ApplyPointDamage(OtherActor, 1.f, GetActorLocation(), SweepResult, nullptr, this, P);
 		}
 	}
-
-	if (OtherActor->IsA(APaperSpriteActor::StaticClass()))
+	else if (OtherActor->IsA(APaperSpriteActor::StaticClass()))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("DESTROY !!")));
+		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("DESTROY !!")));
 
 		OtherActor->Destroy();
 	}
