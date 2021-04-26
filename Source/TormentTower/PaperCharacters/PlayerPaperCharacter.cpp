@@ -11,8 +11,9 @@
 APlayerPaperCharacter::APlayerPaperCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
+	bIsExited = false;
 }
 
 // Called when the game starts or when spawned
@@ -27,7 +28,6 @@ void APlayerPaperCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%s"), *GetController()->GetName()));
 }
 
 // Called to bind functionality to input
@@ -62,16 +62,4 @@ void APlayerPaperCharacter::DeathHandle()
 void APlayerPaperCharacter::PlayerAttack()
 {
 	Attack();
-}
-
-void APlayerPaperCharacter::SetPlayerNumber(int Number)
-{
-	PlayerNumber = Number;
-
-	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%d"),this->PlayerNumber));
-}
-
-int APlayerPaperCharacter::GetPlayerNumber()
-{
-	return PlayerNumber;
 }

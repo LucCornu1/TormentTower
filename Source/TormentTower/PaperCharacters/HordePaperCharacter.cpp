@@ -47,7 +47,7 @@ void AHordePaperCharacter::OnEnterDangerZone(UPrimitiveComponent* OverlappedComp
 {
 	if (OtherActor->IsA(ABasePaperCharacter::StaticClass()) && !OtherActor->IsA(AHordePaperCharacter::StaticClass()))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Hello, Enter !!")));
+		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Hello, Enter !!")));
 
 		if (OtherActor->IsA(AEnnemiPaperCharacter::StaticClass()))
 		{
@@ -80,7 +80,7 @@ void AHordePaperCharacter::OnEnterDeathZone(UPrimitiveComponent* OverlappedComp,
 {
 	if (OtherActor->IsA(ABasePaperCharacter::StaticClass()) && !OtherActor->IsA(AHordePaperCharacter::StaticClass()))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Hello, Enter !!")));
+		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Hello, Enter !!")));
 
 		TSubclassOf<UDamageType> P;
 		UGameplayStatics::ApplyPointDamage(OtherActor, 4.f, GetActorLocation(), SweepResult, nullptr, this, P);

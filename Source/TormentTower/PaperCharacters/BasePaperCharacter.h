@@ -103,14 +103,19 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 
-	// Functions for HUD
-	/** Assessor for the CurrentHP variable */
-	UFUNCTION(BlueprintPure, Category = "HUD")
-		float GetCurrentHP();
+	// Getters & Setters
+	/** Assessor for the CurrentHP variable **/
+	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
+		float GetCurrentHP() { return CurrentHP; };
 
-	/** Assessor for the bIsAttacking variable */
-	UFUNCTION(BlueprintPure, Category = "Character Stats")
-		bool GetIsAttacking();
+	/** Assessor for the bIsAttacking variable **/
+	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
+		bool GetIsAttacking() { return bIsAttacking; };
+
+	/** Assessor for the bIsDead variable **/
+	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
+		bool GetIsDead() { return bIsDead; };
+
 
 	// AttackAnimationFunction
 	UFUNCTION(BlueprintCallable, Category = "ControlFunctions")
