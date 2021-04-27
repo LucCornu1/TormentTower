@@ -38,7 +38,7 @@ private:
 
 protected:
 	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	void BeginPlay() override;
 
 	// Called when the player Enter the SafeZone
 	/* UFUNCTION()
@@ -49,10 +49,11 @@ protected:
 	UFUNCTION()
 		void OnExitSafeZone(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+
 public:
 	// Sets default values for this actor's properties
 	AStartVolume();
 
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	void Tick(float DeltaTime) override;
 };
