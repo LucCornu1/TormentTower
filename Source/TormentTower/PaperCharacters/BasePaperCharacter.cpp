@@ -5,6 +5,7 @@
 #include "PaperFlipbookComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "PlayerPaperCharacter.h"
+#include "PaperSpriteActor.h"
 
 
 // Sets default values
@@ -129,29 +130,35 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 		float FlipbookLengthInSeconds;
 
 		UPaperFlipbook* DesiredAnimation = DeathAnimation;
-		GetSprite()->SetFlipbook(DesiredAnimation);
-		FlipbookLengthInSeconds = GetSprite()->GetFlipbookLength();
-		FlipbookLengthInSeconds -= 0.1f;
+		if (DesiredAnimation != nullptr)
+		{
+			GetSprite()->SetFlipbook(DesiredAnimation);
+			FlipbookLengthInSeconds = GetSprite()->GetFlipbookLength();
+			FlipbookLengthInSeconds -= 0.1f;
 
-		GetWorld()->GetTimerManager().SetTimer(LoopTimerHandle, this, &ABasePaperCharacter::OnAnimationEnd, FlipbookLengthInSeconds, false);
+			GetWorld()->GetTimerManager().SetTimer(LoopTimerHandle, this, &ABasePaperCharacter::OnAnimationEnd, FlipbookLengthInSeconds, false);
+		}
 	}
 	else {
-		if (!DamageCauser || !bCanBeKnockback)
+		if (!IsValid(DamageCauser) || !bCanBeKnockback || DamageCauser->IsA(APaperSpriteActor::StaticClass()))
 		{
 			// Nothing
 		}
 		else {
 			ABasePaperCharacter* Damager = dynamic_cast<ABasePaperCharacter*>(DamageCauser);
 
-			FVector VectorKnockbackDirection = Damager->GetActorLocation() - this->GetActorLocation();
-			GetCharacterMovement()->AirControl = 0.f;
+			if (IsValid(Damager))
+			{
+				FVector VectorKnockbackDirection = Damager->GetActorLocation() - this->GetActorLocation();
+				GetCharacterMovement()->AirControl = 0.f;
 
-			VectorKnockbackDirection.Normalize(0.f);
+				VectorKnockbackDirection.Normalize(0.f);
 
-			FVector LaunchForce = -VectorKnockbackDirection * Damager->BruteForce * 10.f;
-			LaunchForce.Z = Damager->BruteForce * 10;
-			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("%f"), Damager->BruteForce));
-			LaunchCharacter(LaunchForce, true, true);
+				FVector LaunchForce = -VectorKnockbackDirection * Damager->BruteForce * 10.f;
+				LaunchForce.Z = Damager->BruteForce * 10;
+				// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("%f"), Damager->BruteForce));
+				LaunchCharacter(LaunchForce, true, true);
+			}
 		}
 
 		GetWorld()->GetTimerManager().SetTimer(LoopTimerHandle, this, &ABasePaperCharacter::OnKnockbackEnd, 1.f, false);

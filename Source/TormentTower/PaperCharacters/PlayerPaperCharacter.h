@@ -16,13 +16,6 @@ class TORMENTTOWER_API APlayerPaperCharacter : public ABasePaperCharacter
 	GENERATED_BODY()
 	
 private:
-	/** Camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-		UCameraComponent* CameraComponent;
-	/** Camera boom positioning the camera beside the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-		USpringArmComponent* CameraBoom;
-
 	// Number of the Player
 	UPROPERTY(VisibleAnywhere, Category = "Player State")
 		int PlayerNumber;
