@@ -21,6 +21,7 @@ void APlayerPaperCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	PlayerScore = 0;
 }
 
 // Called every frame
