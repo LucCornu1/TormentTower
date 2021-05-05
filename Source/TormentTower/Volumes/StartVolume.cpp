@@ -10,7 +10,7 @@
 // Sets default values
 AStartVolume::AStartVolume()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame. You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("SAFE ZONE"));
@@ -30,7 +30,7 @@ void AStartVolume::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AHordeSpawner::OnEnterSafeZone);
+	// 
 	BoxComponent->OnComponentEndOverlap.AddDynamic(this, &AStartVolume::OnExitSafeZone);
 }
 

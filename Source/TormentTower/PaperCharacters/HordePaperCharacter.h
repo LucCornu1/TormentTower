@@ -16,7 +16,7 @@ class TORMENTTOWER_API AHordePaperCharacter : public ABasePaperCharacter
 	
 private:
 	// Range of the normal attack
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		UBoxComponent* BoxComponent;
 	// Range of the DeathZone
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))

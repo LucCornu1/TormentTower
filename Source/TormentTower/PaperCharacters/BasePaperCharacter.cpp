@@ -4,6 +4,8 @@
 #include "BasePaperCharacter.h"
 #include "PaperFlipbookComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "PlayerPaperCharacter.h"
+#include "PaperSpriteActor.h"
 
 
 // Sets default values
@@ -110,10 +112,17 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 	}
 
 	bCanBeDamage = false;
-	CurrentHP = FMath::Clamp(CurrentHP - Damage, 0.f, MaxHP);
-	OnHit_BP();
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%f"), CurrentHP));
+	if (DamagedActor->IsA(APlayerPaperCharacter::StaticClass()) && DamageCauser->IsA(APlayerPaperCharacter::StaticClass()))
+	{
+		// Nothing
+	}
+	else {
+		CurrentHP = FMath::Clamp(CurrentHP - Damage, 0.f, MaxHP);
+		OnHit_BP();
+	}
+
+	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%f"), CurrentHP));
 
 	if (CurrentHP <= 0.f)
 	{
@@ -121,37 +130,35 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 		float FlipbookLengthInSeconds;
 
 		UPaperFlipbook* DesiredAnimation = DeathAnimation;
-		GetSprite()->SetFlipbook(DesiredAnimation);
-		FlipbookLengthInSeconds = GetSprite()->GetFlipbookLength();
-		FlipbookLengthInSeconds -= 0.1f;
+		if (DesiredAnimation != nullptr)
+		{
+			GetSprite()->SetFlipbook(DesiredAnimation);
+			FlipbookLengthInSeconds = GetSprite()->GetFlipbookLength();
+			FlipbookLengthInSeconds -= 0.1f;
 
-		GetWorld()->GetTimerManager().SetTimer(LoopTimerHandle, this, &ABasePaperCharacter::OnAnimationEnd, FlipbookLengthInSeconds, false);
+			GetWorld()->GetTimerManager().SetTimer(LoopTimerHandle, this, &ABasePaperCharacter::OnAnimationEnd, FlipbookLengthInSeconds, false);
+		}
 	}
 	else {
-		if (!DamageCauser || !bCanBeKnockback)
+		if (!IsValid(DamageCauser) || !bCanBeKnockback || DamageCauser->IsA(APaperSpriteActor::StaticClass()))
 		{
 			// Nothing
 		}
 		else {
 			ABasePaperCharacter* Damager = dynamic_cast<ABasePaperCharacter*>(DamageCauser);
 
-			FVector VectorKnockbackDirection = Damager->GetActorLocation() - this->GetActorLocation();
-			GetCharacterMovement()->AirControl = 0.f;
+			if (IsValid(Damager))
+			{
+				FVector VectorKnockbackDirection = Damager->GetActorLocation() - this->GetActorLocation();
+				GetCharacterMovement()->AirControl = 0.f;
 
-			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, FString::Printf(TEXT("%f"), VectorKnockbackDirection.X));
-			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, FString::Printf(TEXT("%f"), VectorKnockbackDirection.Y));
-			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Silver, FString::Printf(TEXT("%f"), VectorKnockbackDirection.Z));
+				VectorKnockbackDirection.Normalize(0.f);
 
-			VectorKnockbackDirection.Normalize(0.f);
-
-			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%f"), VectorKnockbackDirection.X));
-			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("%f"), VectorKnockbackDirection.Y));
-			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("%f"), VectorKnockbackDirection.Z));
-
-			FVector LaunchForce = -VectorKnockbackDirection * Damager->BruteForce * 10.f;
-			LaunchForce.Z = Damager->BruteForce * 10;
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("%f"), Damager->BruteForce));
-			LaunchCharacter(LaunchForce, true, true);
+				FVector LaunchForce = -VectorKnockbackDirection * Damager->BruteForce * 10.f;
+				LaunchForce.Z = Damager->BruteForce * 10;
+				// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::Printf(TEXT("%f"), Damager->BruteForce));
+				LaunchCharacter(LaunchForce, true, true);
+			}
 		}
 
 		GetWorld()->GetTimerManager().SetTimer(LoopTimerHandle, this, &ABasePaperCharacter::OnKnockbackEnd, 1.f, false);
@@ -175,17 +182,6 @@ void ABasePaperCharacter::OnAttackEnd()
 {
 	bIsAttacking = false;
 	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
-}
-
-
-float ABasePaperCharacter::GetCurrentHP()
-{
-	return this->CurrentHP;
-}
-
-bool ABasePaperCharacter::GetIsAttacking()
-{
-	return bIsAttacking;
 }
 
 
