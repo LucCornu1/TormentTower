@@ -45,9 +45,14 @@ void AHordePaperCharacter::Tick(float DeltaTime)
 
 void AHordePaperCharacter::OnEnterDangerZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (OtherComp->GetName() == TEXT("AttackHitbox"))
+	{
+		return;
+	}
+
 	if (OtherActor->IsA(ABasePaperCharacter::StaticClass()) && !OtherActor->IsA(AHordePaperCharacter::StaticClass()))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Hello, Enter !!")));
+		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Hello, Enter !!")));
 
 		if (OtherActor->IsA(AEnnemiPaperCharacter::StaticClass()))
 		{
@@ -58,10 +63,17 @@ void AHordePaperCharacter::OnEnterDangerZone(UPrimitiveComponent* OverlappedComp
 			UGameplayStatics::ApplyPointDamage(OtherActor, 1.f, GetActorLocation(), SweepResult, nullptr, this, P);
 		}
 	}
-
-	if (OtherActor->IsA(APaperSpriteActor::StaticClass()))
+	else if (OtherActor->IsA(APaperSpriteActor::StaticClass()))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("DESTROY !!")));
+		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("DESTROY !!")));
+
+		TArray<AActor*> AttachedActors;
+		OtherActor->GetAttachedActors(AttachedActors, true);
+
+		for (int i = 0; i < AttachedActors.Num(); i++)
+		{
+			AttachedActors[i]->Destroy();
+		}
 
 		OtherActor->Destroy();
 	}
@@ -71,9 +83,14 @@ void AHordePaperCharacter::OnEnterDangerZone(UPrimitiveComponent* OverlappedComp
 
 void AHordePaperCharacter::OnEnterDeathZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (OtherComp->GetName() == TEXT("AttackHitbox"))
+	{
+		return;
+	}
+
 	if (OtherActor->IsA(ABasePaperCharacter::StaticClass()) && !OtherActor->IsA(AHordePaperCharacter::StaticClass()))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Hello, Enter !!")));
+		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Hello, Enter !!")));
 
 		TSubclassOf<UDamageType> P;
 		UGameplayStatics::ApplyPointDamage(OtherActor, 4.f, GetActorLocation(), SweepResult, nullptr, this, P);
