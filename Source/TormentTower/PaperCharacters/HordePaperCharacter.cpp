@@ -45,6 +45,11 @@ void AHordePaperCharacter::Tick(float DeltaTime)
 
 void AHordePaperCharacter::OnEnterDangerZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (OtherComp->GetName() == TEXT("AttackHitbox"))
+	{
+		return;
+	}
+
 	if (OtherActor->IsA(ABasePaperCharacter::StaticClass()) && !OtherActor->IsA(AHordePaperCharacter::StaticClass()))
 	{
 		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Hello, Enter !!")));
@@ -78,6 +83,11 @@ void AHordePaperCharacter::OnEnterDangerZone(UPrimitiveComponent* OverlappedComp
 
 void AHordePaperCharacter::OnEnterDeathZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (OtherComp->GetName() == TEXT("AttackHitbox"))
+	{
+		return;
+	}
+
 	if (OtherActor->IsA(ABasePaperCharacter::StaticClass()) && !OtherActor->IsA(AHordePaperCharacter::StaticClass()))
 	{
 		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Hello, Enter !!")));

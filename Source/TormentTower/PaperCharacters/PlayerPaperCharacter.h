@@ -43,26 +43,30 @@ public:
 	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
+	// Player score inside the mini-games
+	UPROPERTY(BlueprintReadWrite, Category = "mini-games")
+		int PlayerScore;
+
+
 	// Getters & Setters
-	/** Mutator for the PlayerNumber variable **/
+	/** Mutator for the PlayerNumber variable */
 	UFUNCTION(BlueprintCallable, Category = "Getters&Setters")
 		void SetPlayerNumber(int Number) { PlayerNumber = Number; };
 
-	/** Assessor for the PlayerNumber variable **/
+	/** Assessor for the PlayerNumber variable */
 	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
 		int GetPlayerNumber() { return PlayerNumber; };
 
-	/** Mutator for the bIsExited variable **/
+	/** Mutator for the bIsExited variable */
 	UFUNCTION(BlueprintCallable, Category = "Getters&Setters")
 		void SetIsExited(bool b) { bIsExited = b; };
 
-	/** Assessor for the bIsExited variable **/
+	/** Assessor for the bIsExited variable */
 	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
 		bool GetIsExited() { return bIsExited; };
 
 
-	/** Controls functions **/
-
+	/** Controls functions */
 	// PlayerAttack Function
 	void PlayerAttack();
 
