@@ -4,28 +4,16 @@
 #include "PlayerPaperCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 
 
 // Sets default values
 APlayerPaperCharacter::APlayerPaperCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
-
-	// Default Components value
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("Camera Boom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 1000.0f; // Longueur du bras
-	// CameraBoom->SocketOffset = FVector(0.0f, 0.0f, 75.0f);
-	CameraBoom->SetUsingAbsoluteRotation(true);
-	CameraBoom->bDoCollisionTest = false;
-	CameraBoom->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
-
-	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SideViewCamera"));
-	CameraComponent->ProjectionMode = ECameraProjectionMode::Orthographic;
-	CameraComponent->OrthoWidth = 2000.0f; // Distance de vue entre la caméra et le joueur
-	CameraComponent->SetupAttachment(CameraBoom);
+	bIsExited = false;
 }
 
 // Called when the game starts or when spawned
@@ -33,6 +21,7 @@ void APlayerPaperCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	PlayerScore = 0;
 }
 
 // Called every frame
@@ -45,35 +34,33 @@ void APlayerPaperCharacter::Tick(float DeltaTime)
 // Called to bind functionality to input
 void APlayerPaperCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerPaperCharacter::MoveRight);
-
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerPaperCharacter::PlayerAttack);
+	// Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 
+// MoveRight functions 
 void APlayerPaperCharacter::MoveRight(float AxisValue)
 {
-	if (bIsDead)
+	if (!bIsDead)
 	{
-		return;
+		this->AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
 	}
-
-	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
 }
+// End MoveRight functions
 
 
 void APlayerPaperCharacter::DeathHandle()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("ScreenDebug_DeathHandle_Message")));
-}
+	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("ScreenDebug_DeathHandle_Message")));
 
+	UCapsuleComponent* Capsule = this->GetCapsuleComponent();
+	if (IsValid(Capsule))
+	{
+		Capsule->SetCollisionProfileName(TEXT("NoCollision"));
+	}
+}
 
 void APlayerPaperCharacter::PlayerAttack()
 {
 	Attack();
 }
-

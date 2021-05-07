@@ -16,22 +16,17 @@ class TORMENTTOWER_API APlayerPaperCharacter : public ABasePaperCharacter
 	GENERATED_BODY()
 	
 private:
-	/** Camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-		UCameraComponent* CameraComponent;
-	/** Camera boom positioning the camera beside the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-		USpringArmComponent* CameraBoom;
+	// Number of the Player
+	UPROPERTY(VisibleAnywhere, Category = "Player State")
+		int PlayerNumber;
+	// Boolean to state if the player has entered the ExitZone
+	UPROPERTY(VisibleAnywhere, Category = "Player State")
+		bool bIsExited;
 
-	// MoveFunction
-	void MoveRight(float AxisValue) override;
-
-	// PlayerAttack Function
-	void PlayerAttack();
 
 protected:
 	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	void BeginPlay() override;
 
 	// DeathHandle Override
 	void DeathHandle() override;
@@ -42,10 +37,39 @@ public:
 	APlayerPaperCharacter();
 
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
+	// Player score inside the mini-games
+	UPROPERTY(BlueprintReadWrite, Category = "mini-games")
+		int PlayerScore;
+
+
+	// Getters & Setters
+	/** Mutator for the PlayerNumber variable */
+	UFUNCTION(BlueprintCallable, Category = "Getters&Setters")
+		void SetPlayerNumber(int Number) { PlayerNumber = Number; };
+
+	/** Assessor for the PlayerNumber variable */
+	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
+		int GetPlayerNumber() { return PlayerNumber; };
+
+	/** Mutator for the bIsExited variable */
+	UFUNCTION(BlueprintCallable, Category = "Getters&Setters")
+		void SetIsExited(bool b) { bIsExited = b; };
+
+	/** Assessor for the bIsExited variable */
+	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
+		bool GetIsExited() { return bIsExited; };
+
+
+	/** Controls functions */
+	// PlayerAttack Function
+	void PlayerAttack();
+
+	// MoveFunction
+	void MoveRight(float AxisValue) override;
 };
