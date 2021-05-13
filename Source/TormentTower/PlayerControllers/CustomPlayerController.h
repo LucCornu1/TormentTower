@@ -40,4 +40,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Initialization")
 		void InitController(bool bIsMultiplayer);
 
+
+	FORCEINLINE
+		APlayerPaperCharacter* GetPlayer1() { return Player1; };
+	FORCEINLINE
+		APlayerPaperCharacter* GetPlayer2() { return Player2; };
+
 };

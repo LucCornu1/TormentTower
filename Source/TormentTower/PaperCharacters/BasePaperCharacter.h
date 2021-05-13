@@ -67,7 +67,6 @@ protected:
 		float BruteForce;
 
 	// Damage functions
-
 	UFUNCTION()
 		void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 	UFUNCTION(BlueprintImplementableEvent)
@@ -89,6 +88,7 @@ protected:
 
 	// DeathHandle
 	virtual void DeathHandle();
+	void CancelGravity();
 
 	// MoveFunction
 	UFUNCTION(BlueprintCallable, Category = "ControlFunctions")

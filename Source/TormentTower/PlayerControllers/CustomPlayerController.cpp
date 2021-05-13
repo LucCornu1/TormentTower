@@ -60,7 +60,7 @@ void ACustomPlayerController::JumpP1()
 {
 	if (IsValid(Player1))
 	{
-		Player1->Jump();
+		Player1->CharacterJump();
 	}
 }
 
@@ -76,7 +76,7 @@ void ACustomPlayerController::JumpP2()
 {
 	if (IsValid(Player2))
 	{
-		Player2->Jump();
+		Player2->CharacterJump();
 	}
 }
 

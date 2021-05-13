@@ -8,6 +8,7 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class ACustomPlayerController;
 
 
 UCLASS()
@@ -16,12 +17,19 @@ class TORMENTTOWER_API APlayerPaperCharacter : public ABasePaperCharacter
 	GENERATED_BODY()
 	
 private:
+	// GameController
+	UPROPERTY()
+		ACustomPlayerController* CurrentController;
+
 	// Number of the Player
 	UPROPERTY(VisibleAnywhere, Category = "Player State")
 		int PlayerNumber;
 	// Boolean to state if the player has entered the ExitZone
 	UPROPERTY(VisibleAnywhere, Category = "Player State")
 		bool bIsExited;
+
+	// Called when the player dies, to check if the game is over
+	void CheckGameOver();
 
 
 protected:
@@ -72,4 +80,5 @@ public:
 
 	// MoveFunction
 	void MoveRight(float AxisValue) override;
+	void CharacterJump();
 };

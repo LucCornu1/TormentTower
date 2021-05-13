@@ -46,6 +46,7 @@ void AExitVolume::Tick(float DeltaTime)
 void AExitVolume::NextLevel()
 {
 	int NbPlayersOut = 0;
+	int NbPlayersDead = 0;
 
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerPaperCharacter::StaticClass(), FoundActors);
 	APlayerPaperCharacter* CurrentPlayer;
@@ -61,11 +62,12 @@ void AExitVolume::NextLevel()
 		}
 		else if (CurrentPlayer->GetIsDead())
 		{
-			NbPlayersOut++;
+			NbPlayersDead++;
 		}
 	}
 
-	if (NbPlayersOut == NbPlayers)
+
+	if ((NbPlayersOut + NbPlayersDead) == NbPlayers)
 	{
 		if (!NextLevelName.IsEmpty())
 		{

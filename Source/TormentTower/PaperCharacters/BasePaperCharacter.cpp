@@ -106,7 +106,7 @@ void ABasePaperCharacter::UpdateAnimation()
 
 void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-	if (Damage <= 0 || bIsDead || !bCanBeDamage)
+	if (Damage <= 0 || bIsDead || !bCanBeDamage || !IsValid(DamageCauser))
 	{
 		return;
 	}
@@ -220,4 +220,9 @@ void ABasePaperCharacter::Attack(bool bSpecialAttack)
 void ABasePaperCharacter::DeathHandle()
 {
 	Destroy();
+}
+
+void ABasePaperCharacter::CancelGravity()
+{
+	GetCharacterMovement()->GravityScale = 0.f;
 }

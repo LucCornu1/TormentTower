@@ -5,6 +5,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "../PlayerControllers/CustomPlayerController.h"
 
 
 // Sets default values
@@ -14,6 +16,34 @@ APlayerPaperCharacter::APlayerPaperCharacter()
 	PrimaryActorTick.bCanEverTick = false;
 
 	bIsExited = false;
+}
+
+void APlayerPaperCharacter::CheckGameOver()
+{
+	CurrentController = Cast<ACustomPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+
+	if (PlayerNumber == 0)
+	{
+		if (IsValid(CurrentController->GetPlayer2()))
+		{
+			if (CurrentController->GetPlayer2()->GetIsDead())
+			{
+				UGameplayStatics::OpenLevel(GetWorld(), "Menu");
+			}
+		}
+		else {
+			UGameplayStatics::OpenLevel(GetWorld(), "Menu");
+		}
+	}
+	else
+	{
+		if (CurrentController->GetPlayer1()->GetIsDead())
+		{
+			UGameplayStatics::OpenLevel(GetWorld(), "Menu");
+		}
+	}
+
+	
 }
 
 // Called when the game starts or when spawned
@@ -46,6 +76,14 @@ void APlayerPaperCharacter::MoveRight(float AxisValue)
 		this->AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
 	}
 }
+
+void APlayerPaperCharacter::CharacterJump()
+{
+	if (!bIsDead)
+	{
+		Jump();
+	}
+}
 // End MoveRight functions
 
 
@@ -57,7 +95,10 @@ void APlayerPaperCharacter::DeathHandle()
 	if (IsValid(Capsule))
 	{
 		Capsule->SetCollisionProfileName(TEXT("NoCollision"));
+
+		CancelGravity();
 	}
+	CheckGameOver();
 }
 
 void APlayerPaperCharacter::PlayerAttack()
