@@ -27,6 +27,10 @@ void AExitVolume::BeginPlay()
 void AExitVolume::OnEnterExitZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("EXIT !!")));
+	if (OtherComp->GetName() == TEXT("AttackHitbox"))
+	{
+		return;
+	}
 
 	if (IsValid(OtherActor) && OtherActor->IsA(APlayerPaperCharacter::StaticClass()))
 	{
