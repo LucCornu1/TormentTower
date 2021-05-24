@@ -145,7 +145,7 @@ void ABasePaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const U
 			// Nothing
 		}
 		else {
-			ABasePaperCharacter* Damager = dynamic_cast<ABasePaperCharacter*>(DamageCauser);
+			ABasePaperCharacter* Damager = Cast<ABasePaperCharacter>(DamageCauser);
 
 			if (IsValid(Damager))
 			{

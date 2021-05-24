@@ -32,7 +32,7 @@ protected:
 	void BeginPlay() override;
 
 	// Called when the player Enter the ExitZone
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "Misc")
 		void OnEnterExitZone(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 

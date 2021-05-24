@@ -5,8 +5,8 @@
 #include "Components/BoxComponent.h"
 #include "PaperSpriteActor.h"
 #include "EnnemiPaperCharacter.h"
+#include "PlayerPaperCharacter.h"
 #include "Kismet/GameplayStatics.h"
-
 
 
 // Sets default values
@@ -16,6 +16,7 @@ AHordePaperCharacter::AHordePaperCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	bCanBeKnockback = false;
+	bCanDamage = false;
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("DANGER ZONE"));
 	BoxComponent->SetupAttachment(RootComponent);
@@ -32,6 +33,7 @@ void AHordePaperCharacter::BeginPlay()
 	ForwardAxisValue = GetActorForwardVector().X;
 
 	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AHordePaperCharacter::OnEnterDangerZone);
+	BoxComponent->OnComponentEndOverlap.AddDynamic(this, &AHordePaperCharacter::OnExitDangerZone);
 	DeathZone_BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AHordePaperCharacter::OnEnterDeathZone);
 }
 
@@ -41,11 +43,12 @@ void AHordePaperCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	MoveRight(ForwardAxisValue);
+	DamageCharacter();
 }
 
 void AHordePaperCharacter::OnEnterDangerZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherComp->GetName() == TEXT("AttackHitbox"))
+	if (OtherComp->GetName() == TEXT("AttackHitbox") || !IsValid(OtherActor))
 	{
 		return;
 	}
@@ -59,8 +62,8 @@ void AHordePaperCharacter::OnEnterDangerZone(UPrimitiveComponent* OverlappedComp
 			OtherActor->Destroy();
 		}
 		else {
-			TSubclassOf<UDamageType> P;
-			UGameplayStatics::ApplyPointDamage(OtherActor, 1.f, GetActorLocation(), SweepResult, nullptr, this, P);
+			bCanDamage = true;
+			Target = Cast<APlayerPaperCharacter>(OtherActor);
 		}
 	}
 	else if (OtherActor->IsA(APaperSpriteActor::StaticClass()))
@@ -81,6 +84,19 @@ void AHordePaperCharacter::OnEnterDangerZone(UPrimitiveComponent* OverlappedComp
 	Attack();
 }
 
+void AHordePaperCharacter::OnExitDangerZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (OtherComp->GetName() == TEXT("AttackHitbox") || !IsValid(OtherActor))
+	{
+		return;
+	}
+
+	if (OtherActor->IsA(ABasePaperCharacter::StaticClass()) && !OtherActor->IsA(AHordePaperCharacter::StaticClass()))
+	{
+		bCanDamage = false;
+	}
+}
+
 void AHordePaperCharacter::OnEnterDeathZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherComp->GetName() == TEXT("AttackHitbox"))
@@ -93,8 +109,17 @@ void AHordePaperCharacter::OnEnterDeathZone(UPrimitiveComponent* OverlappedComp,
 		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Hello, Enter !!")));
 
 		TSubclassOf<UDamageType> P;
-		UGameplayStatics::ApplyPointDamage(OtherActor, 4.f, GetActorLocation(), SweepResult, nullptr, this, P);
+		UGameplayStatics::ApplyDamage(OtherActor, 4.f, GetController(), this, P);
 	}
 
 	Attack(true);
+}
+
+void AHordePaperCharacter::DamageCharacter()
+{
+	if (IsValid(Target) && bCanDamage)
+	{
+		TSubclassOf<UDamageType> P;
+		UGameplayStatics::ApplyDamage(Target, 1.f, GetController(), this, P);
+	}
 }

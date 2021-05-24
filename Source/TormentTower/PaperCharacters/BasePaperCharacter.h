@@ -68,7 +68,7 @@ protected:
 
 	// Damage functions
 	UFUNCTION()
-		void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+		virtual void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 	UFUNCTION(BlueprintImplementableEvent)
 		void OnHit_BP();
 

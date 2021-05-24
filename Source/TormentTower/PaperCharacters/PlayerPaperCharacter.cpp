@@ -18,6 +18,14 @@ APlayerPaperCharacter::APlayerPaperCharacter()
 	bIsExited = false;
 }
 
+// Called when the game starts or when spawned
+void APlayerPaperCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	PlayerScore = 0;
+}
+
 void APlayerPaperCharacter::CheckGameOver()
 {
 	CurrentController = Cast<ACustomPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
@@ -44,14 +52,6 @@ void APlayerPaperCharacter::CheckGameOver()
 	}
 
 	
-}
-
-// Called when the game starts or when spawned
-void APlayerPaperCharacter::BeginPlay()
-{
-	Super::BeginPlay();
-
-	PlayerScore = 0;
 }
 
 // Called every frame

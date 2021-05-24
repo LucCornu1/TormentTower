@@ -21,24 +21,16 @@ void AExitVolume::BeginPlay()
 {
 	Super::BeginPlay();
 
-	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AExitVolume::OnEnterExitZone);
+	// BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AExitVolume::OnEnterExitZone);
 }
 
 void AExitVolume::OnEnterExitZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("EXIT !!")));
-	if (OtherComp->GetName() == TEXT("AttackHitbox"))
+	if (OtherComp->GetName() != TEXT("AttackHitbox"))
 	{
-		return;
+		NextLevel();
 	}
-
-	if (IsValid(OtherActor) && OtherActor->IsA(APlayerPaperCharacter::StaticClass()))
-	{
-		APlayerPaperCharacter* Player = Cast<APlayerPaperCharacter>(OtherActor);
-		Player->SetIsExited(true);
-	}
-
-	NextLevel();
 }
 
 void AExitVolume::Tick(float DeltaTime)

@@ -3,6 +3,7 @@
 
 #include "EnnemiPaperCharacter.h"
 #include "Engine.h"
+#include "PlayerPaperCharacter.h"
 
 
 // Sets default values
@@ -68,10 +69,27 @@ bool AEnnemiPaperCharacter::DoLineTrace()
 			this->SetActorRotation(FRotator(0.f, 180.f, 0.f));
 		}*/
 
-		DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(255, 0, 0), false);
+		// DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(255, 0, 0), false);
 
 		return true;
 	}
 
 	return false;
+}
+
+void AEnnemiPaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+	if (!IsValid(DamageCauser))
+	{
+		return;
+	}
+
+	Super::TakeDamage(DamagedActor, Damage, DamageType, InstigatedBy, DamageCauser);
+	
+	if (DamageCauser->IsA(APlayerPaperCharacter::StaticClass()) && bIsDead)
+	{
+		APlayerPaperCharacter* Damager = Cast<APlayerPaperCharacter>(DamageCauser);
+
+		Damager->PlayerScore += 25;
+	}
 }
