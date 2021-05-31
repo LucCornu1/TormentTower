@@ -32,6 +32,7 @@ private:
 		UPaperFlipbook* SpecialAttackAnimation;
 
 
+	// Timers
 	FTimerHandle LoopTimerHandle;
 	FTimerHandle AttackTimerHandle;
 
@@ -49,7 +50,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	/** Called to choose the correct animation to play based on the character's movement state */
+	// Called to choose the correct animation to play based on the character's movement state
 	void UpdateAnimation();
 	void UpdateCharacter();
 
@@ -58,11 +59,9 @@ protected:
 	bool bCanBeDamage;
 	bool bIsAttacking;
 	bool bCanBeKnockback;
-
 	UPROPERTY(EditAnywhere, Category = "Character Stats")
 		float MaxHP;
 	float CurrentHP;
-
 	UPROPERTY(EditAnywhere, Category = "Character Stats")
 		float BruteForce;
 
@@ -91,8 +90,7 @@ protected:
 	void CancelGravity();
 
 	// MoveFunction
-	UFUNCTION(BlueprintCallable, Category = "ControlFunctions")
-		virtual void MoveRight(float AxisValue);
+	virtual void MoveRight (float AxisValue);
 
 
 public:

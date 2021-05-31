@@ -28,6 +28,10 @@ protected:
 	
 	void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser) override;
 
+
+	// MoveFunction
+	virtual void MoveRight(float AxisValue) override;
+
 public:
 	// Sets default values for this character's properties
 	AEnnemiPaperCharacter();

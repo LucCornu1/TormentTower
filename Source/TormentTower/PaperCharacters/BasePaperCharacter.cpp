@@ -187,7 +187,7 @@ void ABasePaperCharacter::OnAttackEnd()
 
 void ABasePaperCharacter::MoveRight(float AxisValue)
 {
-	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
+	// Blank function, which is not a virtual pure because Unreal doesn't allow it
 }
 
 void ABasePaperCharacter::Attack(bool bSpecialAttack)

@@ -115,6 +115,11 @@ void AHordePaperCharacter::OnEnterDeathZone(UPrimitiveComponent* OverlappedComp,
 	Attack(true);
 }
 
+void AHordePaperCharacter::MoveRight(float AxisValue)
+{
+	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
+}
+
 void AHordePaperCharacter::DamageCharacter()
 {
 	if (IsValid(Target) && bCanDamage)

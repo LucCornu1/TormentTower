@@ -93,3 +93,8 @@ void AEnnemiPaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const
 		Damager->PlayerScore += 25;
 	}
 }
+
+void AEnnemiPaperCharacter::MoveRight(float AxisValue)
+{
+	AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
+}
