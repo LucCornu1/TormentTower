@@ -70,6 +70,7 @@ protected:
 		virtual void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 	UFUNCTION(BlueprintImplementableEvent)
 		void OnHit_BP();
+	void CharacterKnockback(ABasePaperCharacter* DamageCauser);
 
 	// Controls variables
 	UPROPERTY(EditAnywhere, Category = "Controls")
@@ -86,6 +87,7 @@ protected:
 		float MaxFlySpeed;
 
 	// DeathHandle
+	void CharacterDeath();
 	virtual void DeathHandle();
 	void CancelGravity();
 
@@ -104,18 +106,18 @@ public:
 	// Getters & Setters
 	/** Assessor for the CurrentHP variable **/
 	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
-		float GetCurrentHP() { return CurrentHP; };
+		float GetCurrentHP() const { return CurrentHP; };
 
 	/** Assessor for the bIsAttacking variable **/
 	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
-		bool GetIsAttacking() { return bIsAttacking; };
+		bool GetIsAttacking() const { return bIsAttacking; };
 
 	/** Assessor for the bIsDead variable **/
 	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
-		bool GetIsDead() { return bIsDead; };
+		bool GetIsDead() const { return bIsDead; };
 
 
 	// AttackAnimationFunction
 	UFUNCTION(BlueprintCallable, Category = "ControlFunctions")
-		void Attack(bool bSpecialAttack = false);
+		void Attack(const bool bSpecialAttack = false);
 };
