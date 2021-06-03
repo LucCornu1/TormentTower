@@ -12,7 +12,7 @@
 // Sets default values
 APlayerPaperCharacter::APlayerPaperCharacter()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame. You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	bIsExited = false;
@@ -25,6 +25,14 @@ void APlayerPaperCharacter::BeginPlay()
 
 	PlayerScore = 0;
 }
+
+// Called every frame
+void APlayerPaperCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
 
 void APlayerPaperCharacter::CheckGameOver()
 {
@@ -52,13 +60,6 @@ void APlayerPaperCharacter::CheckGameOver()
 	}
 
 	
-}
-
-// Called every frame
-void APlayerPaperCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input

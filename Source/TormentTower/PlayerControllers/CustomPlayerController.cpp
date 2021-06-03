@@ -12,6 +12,9 @@ void ACustomPlayerController::BeginPlay()
 }
 
 void ACustomPlayerController::SetupInputComponent()
+// BUT : Associer les contrôles clavier aux méthodes de déplacements des joueurs
+// ENTREE : /
+// SORTIE : /
 {
 	Super::SetupInputComponent();
 
@@ -26,19 +29,31 @@ void ACustomPlayerController::SetupInputComponent()
 	InputComponent->BindAction("AttackP2", IE_Pressed, this, &ACustomPlayerController::AttackP2);
 }
 
-void ACustomPlayerController::InitController(bool bIsMultiplayer)
+void ACustomPlayerController::InitController(const bool bIsMultiplayer, APlayerPaperCharacter* J1, APlayerPaperCharacter* J2)
+// BUT : Initialiser les pointeurs du joueur 1, et du second joueur si multijoueur
+// ENTREE : Un booléen pour savoir si on est en multijoueur, le joueur 1 et le joueur 2
+// SORTIE : /
 {
-	TArray<AActor*> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerPaperCharacter::StaticClass(), FoundActors);
+	if (!IsValid(J1))
+	{
+		return;
+	}
 
-	Player1 = Cast<APlayerPaperCharacter>(FoundActors[0]);
+	Player1 = J1;
 
 	if (bIsMultiplayer)
 	{
-		Player2 = Cast<APlayerPaperCharacter>(FoundActors[1]);
+		if (!IsValid(J2))
+		{
+			return;
+		}
+
+		Player2 = J2;
 	}
 }
 
+
+// Appel des fonctions de déplacement & d'attaque des deux joueurs
 
 void ACustomPlayerController::MoveRightP1(float AxisValue)
 {
