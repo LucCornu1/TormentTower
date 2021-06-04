@@ -35,6 +35,9 @@ void APlayerPaperCharacter::Tick(float DeltaTime)
 
 
 void APlayerPaperCharacter::CheckGameOver()
+// BUT : Verifie si tous les joueurs sont décédés, et si c'est le cas, retourne au menu
+// ENTREE : Rien
+// SORTIE : Rien
 {
 	CurrentController = Cast<ACustomPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
@@ -58,8 +61,6 @@ void APlayerPaperCharacter::CheckGameOver()
 			UGameplayStatics::OpenLevel(GetWorld(), "Menu");
 		}
 	}
-
-	
 }
 
 // Called to bind functionality to input
@@ -89,6 +90,9 @@ void APlayerPaperCharacter::CharacterJump()
 
 
 void APlayerPaperCharacter::DeathHandle()
+// BUT : Enlever les collisions et la gravité sur le joueur, et appeller la méthode CheckGameOver()
+// ENTREE : Rien
+// SORTIE : Rien
 {
 	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("ScreenDebug_DeathHandle_Message")));
 

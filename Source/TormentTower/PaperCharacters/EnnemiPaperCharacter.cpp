@@ -49,6 +49,9 @@ void AEnnemiPaperCharacter::Tick(float DeltaTime)
 
 
 bool AEnnemiPaperCharacter::DoLineTrace()
+// BUT : Tirer un trait en face du personnage, qui va détecter la présence d'un mur
+// ENTREE : Rien
+//SORTIE : Vrai si un mur est détecté, faux dans le cas contraire
 {
 	FHitResult Hit;
 
@@ -58,26 +61,13 @@ bool AEnnemiPaperCharacter::DoLineTrace()
 
 	FCollisionQueryParams QueryParams = FCollisionQueryParams(SCENE_QUERY_STAT(Test), false, this);
 
-	if (GetWorld()->LineTraceSingleByChannel(Hit, StartTrace, EndTrace, ECC_Visibility, QueryParams))
-	{
-		/*if (ForwardAxisValue < 0.f)
-		{
-			this->SetActorRotation(FRotator(0.f, 0.f, 0.f));
-		}
-		else if (ForwardAxisValue > 0.f)
-		{
-			this->SetActorRotation(FRotator(0.f, 180.f, 0.f));
-		}*/
-
-		// DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor(255, 0, 0), false);
-
-		return true;
-	}
-
-	return false;
+	return GetWorld()->LineTraceSingleByChannel(Hit, StartTrace, EndTrace, ECC_Visibility, QueryParams);
 }
 
 void AEnnemiPaperCharacter::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+// BUT : Redéfinition de la méthode TakeDamage, pour attribuer des points de score si un joueur abbat cet ennemi
+// ENTREE : L'acteur blessé, les dégâts subis, le type de dégâts (inutilisé), le responsable, et l'acteur ayant porté le coup
+// SORTIE : Rien
 {
 	if (!IsValid(DamageCauser))
 	{

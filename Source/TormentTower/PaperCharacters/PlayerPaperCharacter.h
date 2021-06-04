@@ -63,7 +63,7 @@ public:
 
 	/** Assessor for the PlayerNumber variable */
 	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
-		int GetPlayerNumber() { return PlayerNumber; };
+		int GetPlayerNumber() const { return PlayerNumber; };
 
 	/** Mutator for the bIsExited variable */
 	UFUNCTION(BlueprintCallable, Category = "Getters&Setters")
@@ -71,7 +71,7 @@ public:
 
 	/** Assessor for the bIsExited variable */
 	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
-		bool GetIsExited() { return bIsExited; };
+		bool GetIsExited() const { return bIsExited; };
 
 
 	/** Controls functions */

@@ -18,6 +18,8 @@ AHordePaperCharacter::AHordePaperCharacter()
 	bCanBeKnockback = false;
 	bCanDamage = false;
 
+
+	// Création des boîtes de collision
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("DANGER ZONE"));
 	BoxComponent->SetupAttachment(RootComponent);
 
@@ -45,6 +47,7 @@ void AHordePaperCharacter::Tick(float DeltaTime)
 	MoveRight(ForwardAxisValue);
 	DamageCharacter();
 }
+
 
 void AHordePaperCharacter::OnEnterDangerZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
