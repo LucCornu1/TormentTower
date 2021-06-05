@@ -29,6 +29,7 @@ void AEnnemiPaperCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	/*
 	bWallDetected = DoLineTrace();
 
 	if (bWallDetected)
@@ -44,7 +45,7 @@ void AEnnemiPaperCharacter::Tick(float DeltaTime)
 	}
 
 	ForwardAxisValue = GetActorForwardVector().X;
-	MoveRight(ForwardAxisValue);
+	MoveRight(ForwardAxisValue);*/
 }
 
 
