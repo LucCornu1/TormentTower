@@ -70,8 +70,8 @@ void AStartVolume::OnExitSafeZone(UPrimitiveComponent* OverlappedComp, AActor* O
 	}
 }
 
-// Called after x seconds to spawn the Horde
 void AStartVolume::OnSpawnTimerEnd()
+// BUT : Faire apparaître la Horde après x secondes
 {
 	FVector Location = this->GetActorLocation();
 	FRotator Rotation = this->GetActorRotation();
