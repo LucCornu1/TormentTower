@@ -50,6 +50,9 @@ void AHordePaperCharacter::Tick(float DeltaTime)
 
 
 void AHordePaperCharacter::OnEnterDangerZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+// BUT : Détecter les objets et personnages qui passent à portée de l'attaque normale de la Horde
+// ENTREE : La signature du délégué "OnComponentBeginOverlap"
+// SORTIE : Rien
 {
 	if (OtherComp->GetName() == TEXT("AttackHitbox") || !IsValid(OtherActor))
 	{
@@ -88,6 +91,9 @@ void AHordePaperCharacter::OnEnterDangerZone(UPrimitiveComponent* OverlappedComp
 }
 
 void AHordePaperCharacter::OnExitDangerZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+// BUT : Détecter les objets et personnages qui sortent de la portée de l'attaque normale de la Horde
+// ENTREE : La signature du délégué "OnComponentEndOverlap"
+// SORTIE : Rien
 {
 	if (OtherComp->GetName() == TEXT("AttackHitbox") || !IsValid(OtherActor))
 	{
@@ -101,6 +107,9 @@ void AHordePaperCharacter::OnExitDangerZone(UPrimitiveComponent* OverlappedComp,
 }
 
 void AHordePaperCharacter::OnEnterDeathZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+// BUT : Détecter les objets et personnages qui passent à portée de l'attaque spéciale de la Horde, et les abattre
+// ENTREE : La signature du délégué "OnComponentBeginOverlap"
+// SORTIE : Rien
 {
 	if (OtherComp->GetName() == TEXT("AttackHitbox"))
 	{
@@ -124,6 +133,9 @@ void AHordePaperCharacter::MoveRight(float AxisValue)
 }
 
 void AHordePaperCharacter::DamageCharacter()
+// BUT : Infliger des dégâts à la cible de la Horde
+// ENTREE : Rien
+// SORTIE : Rien
 {
 	if (IsValid(Target) && bCanDamage)
 	{

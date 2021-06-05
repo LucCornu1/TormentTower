@@ -34,6 +34,14 @@ void AStartVolume::BeginPlay()
 	BoxComponent->OnComponentEndOverlap.AddDynamic(this, &AStartVolume::OnExitSafeZone);
 }
 
+// Called every frame
+void AStartVolume::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
+
 // Called when the player enter the safe zone
 /* void AStartVolume::OnEnterSafeZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -45,8 +53,11 @@ void AStartVolume::BeginPlay()
 
 // Called when the player exit the safe zone
 void AStartVolume::OnExitSafeZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+// BUT : Détecter les joueurs qui sortent de la zone sûre
+// ENTREE : La signature du délégué "OnComponentEndOverlap"
+// SORTIE : Rien
 {
-	if (OtherActor->IsA(APlayerPaperCharacter::StaticClass()))
+	if (OtherActor->IsA(APlayerPaperCharacter::StaticClass()) && IsValid(OtherActor))
 	{
 		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Hello, Exit !!")));
 
@@ -57,12 +68,6 @@ void AStartVolume::OnExitSafeZone(UPrimitiveComponent* OverlappedComp, AActor* O
 			GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &AStartVolume::OnSpawnTimerEnd, SpawnDelayTimer, false);
 		}
 	}
-}
-
-// Called every frame
-void AStartVolume::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
 
 // Called after x seconds to spawn the Horde
