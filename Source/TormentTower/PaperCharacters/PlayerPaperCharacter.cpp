@@ -5,12 +5,14 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "../PlayerControllers/CustomPlayerController.h"
 
 
 // Sets default values
 APlayerPaperCharacter::APlayerPaperCharacter()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame. You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	bIsExited = false;
@@ -31,6 +33,36 @@ void APlayerPaperCharacter::Tick(float DeltaTime)
 
 }
 
+
+void APlayerPaperCharacter::CheckGameOver()
+// BUT : Verifie si tous les joueurs sont décédés, et si c'est le cas, retourne au menu
+// ENTREE : Rien
+// SORTIE : Rien
+{
+	CurrentController = Cast<ACustomPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+
+	if (PlayerNumber == 0)
+	{
+		if (IsValid(CurrentController->GetPlayer2()))
+		{
+			if (CurrentController->GetPlayer2()->GetIsDead())
+			{
+				UGameplayStatics::OpenLevel(GetWorld(), "Menu");
+			}
+		}
+		else {
+			UGameplayStatics::OpenLevel(GetWorld(), "Menu");
+		}
+	}
+	else
+	{
+		if (CurrentController->GetPlayer1()->GetIsDead())
+		{
+			UGameplayStatics::OpenLevel(GetWorld(), "Menu");
+		}
+	}
+}
+
 // Called to bind functionality to input
 void APlayerPaperCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -46,10 +78,21 @@ void APlayerPaperCharacter::MoveRight(float AxisValue)
 		this->AddMovementInput(FVector(1.0f, 0.0f, 0.0f), AxisValue);
 	}
 }
+
+void APlayerPaperCharacter::CharacterJump()
+{
+	if (!bIsDead)
+	{
+		Jump();
+	}
+}
 // End MoveRight functions
 
 
 void APlayerPaperCharacter::DeathHandle()
+// BUT : Enlever les collisions et la gravité sur le joueur, et appeller la méthode CheckGameOver()
+// ENTREE : Rien
+// SORTIE : Rien
 {
 	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("ScreenDebug_DeathHandle_Message")));
 
@@ -57,7 +100,10 @@ void APlayerPaperCharacter::DeathHandle()
 	if (IsValid(Capsule))
 	{
 		Capsule->SetCollisionProfileName(TEXT("NoCollision"));
+
+		CancelGravity();
 	}
+	CheckGameOver();
 }
 
 void APlayerPaperCharacter::PlayerAttack()

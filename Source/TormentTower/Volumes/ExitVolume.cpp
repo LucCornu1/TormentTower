@@ -21,20 +21,7 @@ void AExitVolume::BeginPlay()
 {
 	Super::BeginPlay();
 
-	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AExitVolume::OnEnterExitZone);
-}
-
-void AExitVolume::OnEnterExitZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("EXIT !!")));
-
-	if (IsValid(OtherActor) && OtherActor->IsA(APlayerPaperCharacter::StaticClass()))
-	{
-		APlayerPaperCharacter* Player = Cast<APlayerPaperCharacter>(OtherActor);
-		Player->SetIsExited(true);
-	}
-
-	NextLevel();
+	// BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AExitVolume::OnEnterExitZone);
 }
 
 void AExitVolume::Tick(float DeltaTime)
@@ -43,9 +30,18 @@ void AExitVolume::Tick(float DeltaTime)
 
 }
 
+
+void AExitVolume::OnEnterExitZone(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("EXIT !!")));
+	NextLevel();
+}
+
 void AExitVolume::NextLevel()
+// BUT : Passer au niveau suivant si tous les joueurs en vie sont arrivés à la fin
 {
 	int NbPlayersOut = 0;
+	int NbPlayersDead = 0;
 
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerPaperCharacter::StaticClass(), FoundActors);
 	APlayerPaperCharacter* CurrentPlayer;
@@ -61,11 +57,12 @@ void AExitVolume::NextLevel()
 		}
 		else if (CurrentPlayer->GetIsDead())
 		{
-			NbPlayersOut++;
+			NbPlayersDead++;
 		}
 	}
 
-	if (NbPlayersOut == NbPlayers)
+
+	if ((NbPlayersOut + NbPlayersDead) == NbPlayers)
 	{
 		if (!NextLevelName.IsEmpty())
 		{
@@ -76,9 +73,6 @@ void AExitVolume::NextLevel()
 			{
 				UGameplayStatics::OpenLevel(GetWorld(), NLN);
 			}			
-		}
-		else {
-			// Do something
 		}
 	}
 }
