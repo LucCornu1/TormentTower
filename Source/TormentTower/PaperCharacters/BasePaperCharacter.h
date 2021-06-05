@@ -32,6 +32,7 @@ private:
 		UPaperFlipbook* SpecialAttackAnimation;
 
 
+	// Timers
 	FTimerHandle LoopTimerHandle;
 	FTimerHandle AttackTimerHandle;
 
@@ -49,7 +50,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	/** Called to choose the correct animation to play based on the character's movement state */
+	// Called to choose the correct animation to play based on the character's movement state
 	void UpdateAnimation();
 	void UpdateCharacter();
 
@@ -58,20 +59,18 @@ protected:
 	bool bCanBeDamage;
 	bool bIsAttacking;
 	bool bCanBeKnockback;
-
 	UPROPERTY(EditAnywhere, Category = "Character Stats")
 		float MaxHP;
 	float CurrentHP;
-
 	UPROPERTY(EditAnywhere, Category = "Character Stats")
 		float BruteForce;
 
 	// Damage functions
-
 	UFUNCTION()
-		void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+		virtual void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 	UFUNCTION(BlueprintImplementableEvent)
 		void OnHit_BP();
+	void CharacterKnockback(ABasePaperCharacter* DamageCauser);
 
 	// Controls variables
 	UPROPERTY(EditAnywhere, Category = "Controls")
@@ -88,11 +87,12 @@ protected:
 		float MaxFlySpeed;
 
 	// DeathHandle
+	void CharacterDeath();
 	virtual void DeathHandle();
+	void CancelGravity();
 
 	// MoveFunction
-	UFUNCTION(BlueprintCallable, Category = "ControlFunctions")
-		virtual void MoveRight(float AxisValue);
+	virtual void MoveRight (float AxisValue);
 
 
 public:
@@ -106,18 +106,18 @@ public:
 	// Getters & Setters
 	/** Assessor for the CurrentHP variable **/
 	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
-		float GetCurrentHP() { return CurrentHP; };
+		float GetCurrentHP() const { return CurrentHP; };
 
 	/** Assessor for the bIsAttacking variable **/
 	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
-		bool GetIsAttacking() { return bIsAttacking; };
+		bool GetIsAttacking() const { return bIsAttacking; };
 
 	/** Assessor for the bIsDead variable **/
 	UFUNCTION(BlueprintPure, Category = "Getters&Setters")
-		bool GetIsDead() { return bIsDead; };
+		bool GetIsDead() const { return bIsDead; };
 
 
 	// AttackAnimationFunction
 	UFUNCTION(BlueprintCallable, Category = "ControlFunctions")
-		void Attack(bool bSpecialAttack = false);
+		void Attack(const bool bSpecialAttack = false);
 };

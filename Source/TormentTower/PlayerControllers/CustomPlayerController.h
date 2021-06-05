@@ -38,6 +38,12 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Initialization")
-		void InitController(bool bIsMultiplayer);
+		void InitController(const bool bIsMultiplayer, APlayerPaperCharacter* J1, APlayerPaperCharacter* J2);
+
+
+	FORCEINLINE
+		APlayerPaperCharacter* GetPlayer1() const { return Player1; };
+	FORCEINLINE
+		APlayerPaperCharacter* GetPlayer2() const { return Player2; };
 
 };
