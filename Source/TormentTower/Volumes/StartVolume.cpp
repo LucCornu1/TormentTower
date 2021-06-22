@@ -63,6 +63,7 @@ void AStartVolume::OnExitSafeZone(UPrimitiveComponent* OverlappedComp, AActor* O
 
 		if (!bHordeSpawned)
 		{
+			// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Exit !!")));
 			bHordeSpawned = true;
 
 			GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &AStartVolume::OnSpawnTimerEnd, SpawnDelayTimer, false);
@@ -73,7 +74,7 @@ void AStartVolume::OnExitSafeZone(UPrimitiveComponent* OverlappedComp, AActor* O
 void AStartVolume::OnSpawnTimerEnd()
 // BUT : Faire apparaître la Horde après x secondes
 {
-	FVector Location = this->GetActorLocation();
+	FVector Location = this->GetActorLocation() + FVector(0.f, 10.f, 0.f);
 	FRotator Rotation = this->GetActorRotation();
 	FActorSpawnParameters SpawnInfo;
 	GetWorld()->SpawnActor<AHordePaperCharacter>(HordeBlueprint, Location, Rotation, SpawnInfo);
